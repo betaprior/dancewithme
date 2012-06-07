@@ -1,0 +1,9 @@
+* DanceWithMe!
+
+With this app and a friend, the world is your dance floor.  /DanceWithMe/ synchronizes
+playback of pre-shared media, allowing you to waltz, lindy hop, or tango to
+your favorite music whenever and wherever you wish. 
+
+You can also use this app when sharing a dance floor during individual
+practice -- no more fighting over whose music gets played, and no more
+dancing in silence!

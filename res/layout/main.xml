@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:orientation="vertical">
+
+    <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <include android:id="@+id/hr0" layout="@layout/hr" />
+        <TextView android:textSize="18.0dip" android:id="@+id/lbl_atomic" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dip" android:text="@string/atomic" />
+        <LinearLayout android:gravity="center" android:orientation="horizontal" android:id="@+id/layout_atomic" android:paddingBottom="8.0dip" android:layout_width="fill_parent" android:layout_height="wrap_content">
+<!--             <TextView android:textSize="20.0dip" android:gravity="bottom" android:id="@+id/am_pm_atomic" android:paddingLeft="15.0dip" android:paddingTop="25.0dip" android:paddingRight="15.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="pm" /> -->
+            <TextView android:textSize="50.0dip" android:textStyle="bold" android:gravity="bottom" android:id="@+id/a_hour" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00" />
+            <TextView android:textSize="50.0dip" android:gravity="center" android:id="@+id/a_sep1" android:paddingLeft="5.0dip" android:paddingRight="5.0dip" android:paddingBottom="5.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" />
+            <TextView android:textSize="50.0dip" android:textStyle="bold" android:gravity="bottom" android:id="@+id/a_minute" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00" />
+            <TextView android:textSize="50.0dip" android:gravity="bottom" android:id="@+id/a_sep2" android:paddingLeft="5.0dip" android:paddingRight="5.0dip" android:paddingBottom="5.0dip" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text=":" />
+            <TextView android:textSize="50.0dip" android:gravity="bottom" android:id="@+id/a_second" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="00" />
+        </LinearLayout>
+   </LinearLayout>
+        <include android:id="@+id/hr1" layout="@layout/hr" />
+
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="@string/titleDanceWithMe"
+    android:id="@+id/titleText1"/>
+
+<TextView android:id="@+id/textViewStatusRecFile" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/statusFieldRecordingTo"></TextView>
+
+<TextView
+    android:id="@+id/textViewStatusNtp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/statusFieldNtp" />
+
+<Chronometer
+    android:id="@+id/chronometer1"
+    android:layout_width="match_parent"
+    android:textSize="65dp"
+    android:layout_height="75dp"
+    android:text="@string/chronometer" />
+
+
+<LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout2">
+<Button
+    android:id="@+id/syncDelayNegButton1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="myClickHandler"
+    android:text="Delay-" />
+
+<Button
+    android:id="@+id/syncDelayPosButton1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="myClickHandler"
+    android:text="Delay+" />
+<Button
+    android:id="@+id/syncPlayStopButton1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="myClickHandler"
+    android:text="Stop" />
+<Button
+    android:id="@+id/syncPlayButton1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:onClick="myClickHandler"
+    android:text="SyncPlay" />
+</LinearLayout>
+
+
+<TextView android:text="" android:id="@+id/recordingStatus1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<FrameLayout
+android:layout_width="fill_parent"
+android:layout_height="fill_parent">
+<ListView
+ android:id="@+id/filelist"
+ android:layout_width="fill_parent" 
+ android:layout_height="wrap_content" 
+ />
+</FrameLayout>
+
+</LinearLayout>
+

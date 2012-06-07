@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue">#ffccffff</color>
+    <color name="rowbg">#33666666</color>
+    <color name="cs_hr1">#ff2b314b</color>
+    <color name="cs_hr2">#ff47527d</color>
+</resources>

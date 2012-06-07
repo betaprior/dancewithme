@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DanceWithMe</string>
+    <string name="atomic">Atomic time:</string>
+    <string name="statusFieldNtp">Local offset:</string>
+    <string name="statusFieldRecordingTo">Recording to:</string>
+    <string name="titleDanceWithMe">DanceWithMe v. 0.1</string>
+    <string name="chronometer">Chronometer</string>
+    <string name="btnStartRecording">Start recording</string>
+    <string name="btnStopRecording">Hold to stop</string>
+    <string name="btnNtp">NTP</string>
+    <string name="btnPeakDet">Sync</string>
+    <string name="prefsAccelerometerRate">Accelerometer Rate</string>
+    <string name="titleDancewithmePrefs">Preferences</string>
+    <string name="titleDancewithmeFileChooser">File Chooser</string>
+</resources>
