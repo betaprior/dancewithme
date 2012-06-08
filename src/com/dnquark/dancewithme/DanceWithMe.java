@@ -71,7 +71,7 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     private AppKeyPair dboxAppKeys;
     private AndroidAuthSession dboxSession;
     
-    private final int MENU_PREFS=1, MENU_NTP_SYNC=2, MENU_CHOOSE_FILE=3, MENU_FORCE_REAUTH=4;
+    private final int MENU_PREFS=1, MENU_NTP_SYNC=2, MENU_CHOOSE_FILE=3, MENU_FORCE_REAUTH=4, MENU_CHOOSE_LOCAL=5;
     
     private final int GROUP_DEFAULT=0;
     
@@ -243,7 +243,8 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(GROUP_DEFAULT, MENU_PREFS, 0, "Preferences");
         menu.add(GROUP_DEFAULT, MENU_NTP_SYNC, 0, "NTP Sync");
-        menu.add(GROUP_DEFAULT, MENU_CHOOSE_FILE, 0, "Choose file");
+        menu.add(GROUP_DEFAULT, MENU_CHOOSE_LOCAL, 0, "Local file");
+        menu.add(GROUP_DEFAULT, MENU_CHOOSE_FILE, 0, "Dbox file");
         menu.add(GROUP_DEFAULT, MENU_FORCE_REAUTH, 0, "Dbox reauth");
         return super.onCreateOptionsMenu(menu);
     }
@@ -262,21 +263,27 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
             new GetNtpTime().execute();
             return true;
         case MENU_CHOOSE_FILE:
-            chooseFile();
+            chooseDboxFile();
+            return true;
+        case MENU_CHOOSE_LOCAL:
+            chooseLocalFile();
             return true;
         case MENU_FORCE_REAUTH:
             SharedPreferences.Editor appDataPrefsEditor = appDataPrefs.edit();
             appDataPrefsEditor.remove(PREFS_DBOX_KEY);
             appDataPrefsEditor.remove(PREFS_DBOX_SECRET);
             appDataPrefsEditor.commit();
-            chooseFile();
+            chooseDboxFile();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
     
+    public void chooseLocalFile() {
+        startActivity(new Intent(this, FileExplore.class));
+    }
  
-    public void chooseFile() {
+    public void chooseDboxFile() {
         AccessTokenPair savedTokens = getDboxAccessTokenFromPrefs();
         if (savedTokens == null) {
             Log.d(TAG, "got NULL for saved tokens; authenticating...");
