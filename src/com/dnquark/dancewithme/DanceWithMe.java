@@ -32,6 +32,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.DropBoxManager.Entry;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.SystemClock;
@@ -65,11 +66,17 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     private static final String APP_SECRET = "e18afra2tklir0n";
     private static final AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
     private static final String DBOX_APP_DIR_PATH = "Apps/DanceWithMe"; 
+    private static final String DBOX_APP_DIR_CACHE_PATH = "Android/data/com.dropbox.android/files/scratch/" + DBOX_APP_DIR_PATH;
+    private File defaultDboxCacheDir = new File(Environment.getExternalStorageDirectory() + "/" + DBOX_APP_DIR_CACHE_PATH);
     static final String PREFS_DBOX_KEY = "dropboxAccesTokenKey";
     static final String PREFS_DBOX_SECRET = "dropboxAccesTokenSecret";
     private DropboxAPI<AndroidAuthSession> mDBApi;
     private AppKeyPair dboxAppKeys;
     private AndroidAuthSession dboxSession;
+
+    private static final int CHOOSE_FILE_REQUEST = 1;
+
+    private DanceWithMeApp app;
     
     private final int MENU_PREFS=1, MENU_NTP_SYNC=2, MENU_CHOOSE_FILE=3, MENU_FORCE_REAUTH=4, MENU_CHOOSE_LOCAL=5;
     
@@ -90,6 +97,8 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     SharedPreferences prefs;
     SharedPreferences appDataPrefs;
     static final String DATA_PREFS_FILENAME = "datastorePrefs";
+    static final String PREFS_LAST_CHOSEN_FILE = "lastChosenFile";
+    
     FileManager fileManager;
     SntpClient ntpClient;
     DLMediaPlayer mediaPlayer;
@@ -163,6 +172,12 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     }
 
     private void initComponents() {
+        app = (DanceWithMeApp)getApplication();
+        appDataPrefs = getSharedPreferences(DATA_PREFS_FILENAME, MODE_PRIVATE);
+        
+        app.setMusicDirectory(defaultDboxCacheDir);
+        setLastChosenTrack();
+        
         fileManager = new FileManager(this);
         ntpClient = new SntpClient();
         mediaPlayer = new DLMediaPlayer(this);
@@ -173,8 +188,6 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
         dboxAppKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         dboxSession = new AndroidAuthSession(dboxAppKeys, ACCESS_TYPE);
         mDBApi = new DropboxAPI<AndroidAuthSession>(dboxSession);
-        
-        appDataPrefs = getSharedPreferences(DATA_PREFS_FILENAME, MODE_PRIVATE);
 
         atomicHour = (TextView) findViewById(R.id.a_hour);
         atomicMinute = (TextView) findViewById(R.id.a_minute);
@@ -199,6 +212,15 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
         wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
         prefs = PreferenceManager.getDefaultSharedPreferences(this); 
         prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    private void setLastChosenTrack() {
+        String filePath = appDataPrefs.getString(PREFS_LAST_CHOSEN_FILE, "");
+        File file = new File(filePath);
+            if (file.exists()) {
+                app.setSelectedTrack(file);
+                recordingFileText.setText(app.getSelectedTrack().getPath());
+            }
     }
     
     private View.OnTouchListener myButtonLongPressListener(final Runnable delayedAction) {
@@ -280,9 +302,25 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
     }
     
     public void chooseLocalFile() {
-        startActivity(new Intent(this, FileExplore.class));
+        startActivityForResult(new Intent(this, FileExplore.class), CHOOSE_FILE_REQUEST);
     }
  
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+         if (requestCode == CHOOSE_FILE_REQUEST) {
+              if (resultCode == RESULT_OK) {
+                 // chosen file is now reflected in the global state
+                 SharedPreferences.Editor appDataPrefsEditor = appDataPrefs.edit();
+                 File lastChosenFile = app.getSelectedTrack();
+                 if (lastChosenFile != null && lastChosenFile.exists())
+                     appDataPrefsEditor.putString(PREFS_LAST_CHOSEN_FILE, lastChosenFile.getPath());
+                 appDataPrefsEditor.commit();
+                 if (app.getSelectedTrack() != null)
+                     recordingFileText.setText(app.getSelectedTrack().getPath());
+             }
+         }
+    }
+
+    
     public void chooseDboxFile() {
         AccessTokenPair savedTokens = getDboxAccessTokenFromPrefs();
         if (savedTokens == null) {
@@ -378,7 +416,7 @@ public class DanceWithMe extends Activity implements OnSharedPreferenceChangeLis
                 Log.i("DbAuthLog", "Error authenticating", e);
             }
         }
-        
+         
     }
     
     private void storeKeys(String key, String secret) {

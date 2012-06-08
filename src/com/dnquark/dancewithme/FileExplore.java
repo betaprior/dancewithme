@@ -27,28 +27,27 @@ public class FileExplore extends Activity {
     // Check if the first level of the directory structure is the one showing
     private Boolean firstLvl = true;
 
-    private static final String TAG = "F_PATH";
+    private static final String TAG = "DanceWithMe file chooser";
 
     private Item[] fileList;
     private File path = new File(Environment.getExternalStorageDirectory() + "");
     private String chosenFile;
     private static final int DIALOG_LOAD_FILE = 1000;
+    private DanceWithMeApp app;
 
     ListAdapter adapter;
     
-    public FileExplore() { super(); }
-    
-    public FileExplore(File path) {
-        super();
-        if (path != null && path.exists())
-            this.path = path;
-    }
+
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
+        app = (DanceWithMeApp)getApplication();
+        File startingDir = app.getMusicDirectory();
+        if (startingDir != null && startingDir.exists() && startingDir.isDirectory()) path = startingDir; 
+        Log.d(TAG, "FILE: " + startingDir.getPath() + "; exists? " + Boolean.toString(startingDir.exists()));
+        
         loadFileList();
 
         showDialog(DIALOG_LOAD_FILE);
@@ -224,7 +223,9 @@ public class FileExplore extends Activity {
                         }
                         // File picked
                         else {
-                            // Perform action with file picked
+                            app.setSelectedTrack(new File(path + "/" + chosenFile));
+                            setResult(RESULT_OK);
+                            finish();
                         }
 
                     }

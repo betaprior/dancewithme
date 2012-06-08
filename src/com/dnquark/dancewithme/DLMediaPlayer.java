@@ -48,7 +48,12 @@ class DLMediaPlayer {
         tOn = System.currentTimeMillis() - System.nanoTime() / 1000000;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(danceWithMe);
         testFilePath = prefs.getString("prefsMediaSyncTestFile", "");
-        testFile = new File(testFilePath);
+        File selectedFile = ((DanceWithMeApp)danceWithMe.getApplication()).getSelectedTrack();
+        if (selectedFile != null && selectedFile.exists()) {
+            testFile = selectedFile; 
+            Log.d(TAG, "selecting file from global state" + testFile.getPath()); }
+        else
+            testFile = new File(testFilePath);
         playerInit();
     }
 
@@ -103,6 +108,14 @@ class DLMediaPlayer {
 //        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(danceWithMe);
 //        testFilePath = prefs.getString("prefsMediaSyncTestFile", "");
 //        testFile = new File(testFilePath);
+        
+        File selectedFile = ((DanceWithMeApp)danceWithMe.getApplication()).getSelectedTrack();
+        if (selectedFile != null && selectedFile.exists()) {
+            testFile = selectedFile; 
+            Log.d(TAG, "selecting file from global state" + testFile.getPath()); }
+        else
+            testFile = new File(testFilePath);
+        
         Log.d(TAG, "testfilepath: " + testFilePath);
         playerInit();
         timer.schedule(ttask, schDate);
